@@ -1,4 +1,4 @@
-const jsonQuery = {"query": [
+const ajsonQuery = {"query": [
   {
       "code": "Vuosi",
       "selection": {
@@ -58,13 +58,70 @@ const fetchData = async() => {
   const url = "https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/synt/statfin_synt_pxt_12dy.px"
 
   const res = await fetch(url, {
-    method: "POST"
+    method: "POST",
+    headers: {"content-type": "application/json"},
+    body: JSON.stringify(ajsonQuery)
   })
-
+  if(!res.ok){
+    return
+  }
   const data = await res.json()
-
-  console.log(data)
+  return data
 
 }
 
-fetchData()
+const buildChart1 = async () => {
+  const data = await fetchData()
+
+
+
+
+  const alue = Object.values(data.dimension.Alue.category.label);
+  const vuodet = Object.values(data.dimension.Vuosi.category.label);
+  const tiedot = (data.value);
+
+  //console.log(alue)
+  //console.log(vuodet)
+  //console.log(tiedot)
+
+  /*tiedot.forEach((tieto, index) =>{
+
+    tiedot[index] = {
+      name: alue,
+      values: tiedot[index]
+  }
+
+
+  })*/
+
+
+
+   dataset =[{
+      name: alue,
+      values: tiedot}]
+  
+
+  const chartingData = {
+    labels: vuodet,
+    datasets: dataset
+
+  
+}
+
+
+const chart = new frappe.Chart("#chart", {
+  title: alue,
+  data: chartingData,
+  type: "line",
+  height: 400,
+  colors: ['#f54b4b'],
+  lineOptions: {
+    hideDots: 1,
+    regionFill: 0
+}
+
+})
+
+}
+
+buildChart1()
