@@ -113,8 +113,8 @@ const chart = new frappe.Chart("#chart", {
   title: alue,
   data: chartingData,
   type: "line",
-  height: 400,
-  colors: ['#f54b4b'],
+  height: 450,
+  colors: ['#eb5146'],
   lineOptions: {
     hideDots: 1,
     regionFill: 0
